@@ -289,6 +289,11 @@ func resourceNetScalerLbmonitor() *schema.Resource {
 				Optional: true,
 				Computed: true,
 			},
+			"respcode": &schema.Schema{
+				Type:     schema.TypeInt,
+				Optional: true,
+				Computed: true,
+			},
 			"resptimeout": &schema.Schema{
 				Type:     schema.TypeInt,
 				Optional: true,
@@ -547,6 +552,7 @@ func createLbmonitorFunc(d *schema.ResourceData, meta interface{}) error {
 		Radnasid:               d.Get("radnasid").(string),
 		Radnasip:               d.Get("radnasip").(string),
 		Recv:                   d.Get("recv").(string),
+		Respcode:            	d.Get("respcode").(int),
 		Resptimeout:            d.Get("resptimeout").(int),
 		Resptimeoutthresh:      d.Get("resptimeoutthresh").(int),
 		Retries:                d.Get("retries").(int),
@@ -666,6 +672,7 @@ func readLbmonitorFunc(d *schema.ResourceData, meta interface{}) error {
 	d.Set("radnasid", data["radnasid"])
 	d.Set("radnasip", data["radnasip"])
 	d.Set("recv", data["recv"])
+	d.Set("respcode", data["respcode"])
 	d.Set("resptimeout", data["resptimeout"])
 	d.Set("resptimeoutthresh", data["resptimeoutthresh"])
 	d.Set("retries", data["retries"])
@@ -986,6 +993,11 @@ func updateLbmonitorFunc(d *schema.ResourceData, meta interface{}) error {
 	if d.HasChange("recv") {
 		log.Printf("[DEBUG] Recv has changed for lbmonitor %s, starting update", lbmonitorName)
 		lbmonitor.Recv = d.Get("recv").(string)
+		hasChange = true
+	}
+	if d.HasChange("respcode") {
+		log.Printf("[DEBUG] Respcode has changed for lbmonitor %s, starting update", lbmonitorName)
+		lbmonitor.Respcode = d.Get("respcode").(int)
 		hasChange = true
 	}
 	if d.HasChange("resptimeout") {
